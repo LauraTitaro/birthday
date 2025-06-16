@@ -14,11 +14,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-image: url('Medien.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
 
     header {
       text-align: center;
       padding: 3rem 1rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      width: 100%;
     }
 
     h1 {
@@ -31,9 +37,27 @@
       color: #ccc;
     }
 
+    .language-switch {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .language-switch select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      background-color: #000;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+
     section {
       max-width: 600px;
       padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+      margin: 1rem;
     }
 
     .info {
@@ -43,16 +67,7 @@
     }
 
     .images, .moodboard {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 2rem;
-    }
-
-    .images img, .moodboard img {
-      width: 100%;
-      max-width: 600px;
-      border-radius: 10px;
+      display: none;
     }
 
     .gifts, .dresscode {
@@ -106,6 +121,7 @@
       display: none;
     }
   </style>
+  <link href="https://fonts.cdnfonts.com/css/vivaldi" rel="stylesheet">
 </head>
 <body>
   <!-- Hintergrundmusik -->
@@ -114,11 +130,19 @@
     Your browser does not support the audio element.
   </audio>
 
+  <div class="language-switch">
+    <select onchange="location.href='?code=laura30&lang='+this.value">
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+      <option value="it">Italiano</option>
+    </select>
+  </div>
+
   <div id="access-denied">Zugang verweigert – bitte nutze den korrekten Zugangslink.<br>Access denied – please use the correct access link.<br>Accesso negato – utilizza il link corretto.</div>
 
   <div id="content" style="display:none;">
     <header>
-      <h1>The World through my Eyes</h1>
+      <h1 style="font-family: 'Vivaldi', cursive;">The World through my Eyes</h1>
       <p class="subtitle">Geburtstagseinladung · Birthday Invitation · Invito di compleanno</p>
     </header>
 
@@ -130,22 +154,11 @@
         <p>Bitte melde jede Person einzeln an (inkl. Plus Eins).<br>Please register each person individually (including plus ones).<br>Si prega di registrare ogni persona singolarmente (inclusi gli accompagnatori).</p>
       </div>
 
-      <div class="images">
-        <img src="Medien.jpeg" alt="Bild 1">
-        <img src="Medien (1).jpeg" alt="Bild 2">
-      </div>
-
       <div class="dresscode">
         <h2>Dresscode 👗🕴️</h2>
         <p><strong>Deutsch:</strong> Elegant. Männer in Blazer oder Anzug, Frauen in Abendkleidern oder langen Kleidern. Inspiriert von "Breakfast at Tiffany's" & James Bond.</p>
         <p><strong>English:</strong> Elegant. Men in blazers or suits, women in evening dresses or gowns. Inspired by "Breakfast at Tiffany's" & James Bond.</p>
         <p><strong>Italiano:</strong> Elegante. Uomini in blazer o abito, donne in abiti da sera o lunghi. Ispirazione: "Colazione da Tiffany" & James Bond.</p>
-      </div>
-
-      <div class="moodboard">
-        <h2>Moodboard ✨</h2>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Audrey_Hepburn_1956.jpg" alt="Breakfast at Tiffany's Vibe">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Sean_Connery_as_James_Bond_%281963%29.jpg" alt="James Bond Look">
       </div>
 
       <form action="https://formspree.io/f/xyzjjlzv" method="POST">
@@ -174,15 +187,18 @@
 
       <div class="gifts">
         <h2>Geschenke 🎁 · Gifts · Regali</h2>
-        <p>Das größte Geschenk ist deine Anwesenheit.<br>The greatest gift is your presence.<br>Il regalo più grande è la tua presenza.</p>
-        <p>Falls du dennoch etwas schenken möchtest:<br>If you would still like to bring a gift:<br>Se desideri comunque portare un regalo:</p>
-        <p>Ich freue mich über persönliche Dinge, Erinnerungen, oder einfach etwas Schönes ♥</p>
+        <p><strong>Wichtig:</strong> Bitte keine Geschenke mitbringen – keine Blumen, kein Wein, keine Schokolade.</p>
+        <p>Das größte Geschenk ist deine Anwesenheit.</p>
+        <p>Wenn du dennoch etwas geben möchtest, kannst du gerne an folgende Organisationen spenden:</p>
+        <ul>
+          <li><a href="#" target="_blank">Organisation 1</a></li>
+          <li><a href="#" target="_blank">Organisation 2</a></li>
+        </ul>
       </div>
     </section>
   </div>
 
   <script>
-    // Zugangscode prüfen
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     const requiredCode = "laura30";
@@ -193,11 +209,15 @@
       document.getElementById("access-denied").style.display = "block";
     }
 
-    // Zeige Essenswahl nur wenn "Ja" gewählt wird
-    document.getElementById('kommt').addEventListener('change', function () {
-      const essenChoice = document.getElementById('essen-choice');
-      essenChoice.style.display = this.value === 'Ja' ? 'block' : 'none';
-    });
+    const kommtSelect = document.getElementById('kommt');
+    const essenChoice = document.getElementById('essen-choice');
+
+    function toggleEssenChoice() {
+      essenChoice.style.display = kommtSelect.value === 'Ja' ? 'block' : 'none';
+    }
+
+    kommtSelect.addEventListener('change', toggleEssenChoice);
+    toggleEssenChoice();
   </script>
 </body>
 </html>
